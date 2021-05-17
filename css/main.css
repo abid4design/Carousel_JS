@@ -7,6 +7,12 @@ body{
     padding-left: 15px;
     padding-right: 15px;
 }
+.title{
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+}
 .item{
     background-color: #fff;
     margin: 20px;
@@ -81,4 +87,28 @@ body{
     left: 20px;
 
 }
+.carousel_pagination{
+    display: none;
+    text-align: center;
+}
+.carousel_pagination_button{
+    display: inline-block;
+    margin: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    cursor: pointer;
+    transition: all .3s;
+}
+.carousel_pagination_button:hover, .carousel_pagination_button--active{
+    background-color: #fff;
+    transform: scale(1.2);
+}
+@media screen and (min-width: 800px) {
+    .carousel_pagination{
+        display: block;
 
+    }
+
+}

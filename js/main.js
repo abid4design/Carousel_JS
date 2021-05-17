@@ -12,13 +12,17 @@ class Carousel{
      * @param {Object} [options.slidesToScroll = 1] Nombre d'éléments à faire défiller
      * @param {Object} [options.slidesVisible = 1] Nombre d'éléments visible dans un slide
      * @param {boolean} [options.loop = false] doit-on boucler en fin de carousel
+     * @param {boolean} [options.pagination = false]
+     * @param {boolean} [options.navigation = false]
      */
     constructor(element, options = {}){
         this.element= element
         this.options = Object.assign({}, {
             slidesToScroll:  1,
             slidesVisible: 1,
-            loop: false
+            loop: false,
+            pagination: false,
+            navigation: false
         }, options)
         let children = [].slice.call(element.children)
         this.isMobile = false
@@ -38,7 +42,12 @@ class Carousel{
             return item
         })
         this.setStyle()
+        if(this.options.navigation){
         this.createNavigation()
+        }
+        if(this.options.pagination){
+        this.createPagination()
+        }
 
         // Evenements
         this.moveCallback.forEach( cb => cb(0))
@@ -102,6 +111,28 @@ class Carousel{
         })
 
 
+    }
+
+    /**
+     *  Crée la pagination dans le DOM
+     */
+    createPagination(){
+        let pagination = this.createDivWithClass('carousel_pagination')
+        this.root.appendChild(pagination)
+        let buttons = []
+        for( let i = 0; i < this.items.length; i = i + this.options.slidesToScroll){
+            let button = this.createDivWithClass('carousel_pagination_button')
+            pagination.appendChild(button)
+            button.addEventListener('click', () => this.goTo(i))
+            buttons.push(button)
+        }
+        this.onMove(index => {
+            let activeButton = buttons[Math.floor(index / this.options.slidesToScroll)]
+            if(activeButton){
+                buttons.forEach( button => {button.classList.remove('carousel_pagination_button--active')})
+                activeButton.classList.add('carousel_pagination_button--active')
+            }
+        })
     }
 
     next(){
@@ -191,11 +222,15 @@ class Carousel{
     new Carousel(document.querySelector('#carousel1'), {
         slidesToScroll: 3,
         slidesVisible: 3,
-        loop: true
+        loop: true,
+        navigation: true
     })
     new Carousel(document.querySelector('#carousel2'), {
         slidesToScroll: 2,
-        slidesVisible: 2
+        slidesVisible: 2,
+        pagination: true,
+        loop: true,
+        navigation: true
     })
     new Carousel(document.querySelector('#carousel3'), {
         slidesToScroll: 1,
